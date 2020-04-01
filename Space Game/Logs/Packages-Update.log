@@ -1,11 +1,11 @@
 
-=== Wed Apr  1 13:34:48 2020
+=== Wed Apr  1 17:03:00 2020
 
 Packages were changed.
 Update Mode: mergeDefaultDependencies
 
 The following packages were added:
-  com.unity.analytics@3.2.2
+  com.unity.analytics@3.2.3
   com.unity.purchasing@2.0.3
   com.unity.ads@2.0.8
   com.unity.textmeshpro@1.4.1
