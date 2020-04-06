@@ -25,6 +25,7 @@ public class Crafter : MonoBehaviour
 			Vector3 cPos = Vector3.zero;
 			cPos.x = Random.Range(starPosMin.x, starPosMax.x);
 			cPos.y = Random.Range(starPosMin.y, starPosMax.y);
+            cPos.z = 10;
 			
 			float scaleU = Random.value;
 			float scaleVal = Mathf.Lerp(starScaleMin, starScaleMax, scaleU);
