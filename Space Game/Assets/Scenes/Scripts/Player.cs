@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : Ship
 {
@@ -9,7 +10,7 @@ public class Player : Ship
     public Text deathsGT;
     public Text distanceGT;
 
-    private int deaths = 0;
+    private int deaths;
 
     // Start is called before the first frame update
     void Start()
@@ -20,11 +21,15 @@ public class Player : Ship
         scoreGO = GameObject.Find("Distance");
         distanceGT = scoreGO.GetComponent<Text>();
         
+        deaths = PlayerPrefs.GetInt("deaths");
+        deathsGT.text = "DEATHS: " + deaths;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        
         controls();
         base.Update();
         GameObject goal = GameObject.Find("Goal");
@@ -42,6 +47,7 @@ public class Player : Ship
             v = Vector2.zero;
             deaths++;
             deathsGT.text = "DEATHS: " + deaths;
+            resetLevel();
         }
     }
 
@@ -59,5 +65,11 @@ public class Player : Ship
         a *= mag;
         Vector3 pos = Input.mousePosition;
         angle = Mathf.Atan2(pos.y - 0.5f * Screen.height, pos.x - 0.5f * Screen.width);
+    }
+
+
+    private void resetLevel() {
+        PlayerPrefs.SetInt("deaths", deaths);
+        SceneManager.LoadScene("Level 1");
     }
 }
