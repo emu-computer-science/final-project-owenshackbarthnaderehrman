@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Vector2 p, v;
-    public float angle;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float speed, angle;
+    private Vector3 dir;
 
-    // Update is called once per frame
+    public void findAngle(Vector3 from, Vector3 to)
+    {
+        transform.position = from;
+        Vector3 direct = to - from;
+        angle = Mathf.Atan2(direct.y, direct.x);
+        dir = speed * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+    }
+  
     void Update()
     {
-        p += v * Time.deltaTime;
-        transform.position = p;
+        transform.position += dir * Time.deltaTime;
         transform.rotation = Quaternion.AngleAxis(angle * 180.0f / 3.141592653f, new Vector3(0, 0, 1));
+    }
+
+    protected void OnCollisionEnter(Collision coll)
+    {
+        GameObject collidedWith = coll.gameObject;
+        if (collidedWith.tag == "Shooter" || collidedWith.tag == "Player" || collidedWith.tag == "Bullet" || collidedWith.tag == "Planet")
+        {
+            Destroy(this.gameObject);
+        }
+
     }
 }

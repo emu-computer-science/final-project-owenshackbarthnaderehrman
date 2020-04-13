@@ -14,7 +14,7 @@ public class Ship : MonoBehaviour
     {
         a = new Vector2(0, 0);
         v = new Vector2(0, 0);
-        p = new Vector2(0, 0);
+        p = new Vector2(transform.position.x, transform.position.y);
     }
 
     // Update is called once per frame

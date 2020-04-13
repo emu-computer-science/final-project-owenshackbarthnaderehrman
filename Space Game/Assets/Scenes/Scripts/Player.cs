@@ -10,7 +10,10 @@ public class Player : Ship
     public Text deathsGT;
     public Text distanceGT;
 
+    public GameObject bulletPrefab;
+
     private int deaths;
+    private float cooldown;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +26,7 @@ public class Player : Ship
         
         deaths = PlayerPrefs.GetInt("deaths");
         deathsGT.text = "DEATHS: " + deaths;
+        cooldown = 0f;
     }
 
     // Update is called once per frame
@@ -47,6 +51,7 @@ public class Player : Ship
             v = Vector2.zero;
             deaths++;
             deathsGT.text = "DEATHS: " + deaths;
+            Destroy(this.gameObject);
             resetLevel();
         }
     }
@@ -62,9 +67,18 @@ public class Player : Ship
             --a.y;
         if (Input.GetKey(KeyCode.D))
             ++a.x;
+        if (Input.GetMouseButtonDown(0) && cooldown < 0)
+        {
+            GameObject B = Instantiate<GameObject>(bulletPrefab);
+            Bullet b = B.GetComponent<Bullet>();
+            Vector3 dx = 2f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+            b.findAngle(transform.position + dx, transform.position + 2 * dx);
+            cooldown = 0.5f;
+        }
         a *= mag;
         Vector3 pos = Input.mousePosition;
         angle = Mathf.Atan2(pos.y - 0.5f * Screen.height, pos.x - 0.5f * Screen.width);
+        cooldown -= Time.deltaTime;
     }
 
 

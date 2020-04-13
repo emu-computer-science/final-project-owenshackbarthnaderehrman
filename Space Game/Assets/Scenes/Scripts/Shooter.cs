@@ -4,30 +4,45 @@ using UnityEngine;
 
 public class Shooter : Ship
 {
-    public float reps = 1;
     private float time = 0;
 
     public GameObject bulletPrefab;
 
+    private GameObject target;
+    void Start()
+    {
+        base.Start();
+        target = GameObject.Find("Player");
+    }
 
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        if (time >= 1)
+        if (Random.Range(0.0f, 1.0f) < (Time.deltaTime / 5.0f) && target != null)
         {
-            /*
-            GameObject bullet = Instantiate<Bullet>(bulletPrefab);
-            Vector3 cPos = Vector3.zero;
-            GameObject player = GameObject.Find("Player");
-
-            Vector3 pp = player.transform.position, ps = transform.position;
-
-            float angle = Mathf.Atan2(pp.y - ps.y, pp.x - ps.x);
-            Vector2 pos = new Vector2(ps.x, ps.y) + new Vector2(Mathf.Cos(angle) * 1.5f, Mathf.Sin(angle) * 1.5f);
-            bullet.p = pos;
-            bullet.v = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-            */
+            GameObject B = Instantiate<GameObject>(bulletPrefab);
+            Bullet b = B.GetComponent<Bullet>();
+            Vector3 from = transform.position + 2f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+            b.findAngle(from, target.transform.position);
         }
+
+        //Look at target
+        if (target != null)
+        {
+            Vector3 direct = target.transform.position - transform.position;
+            angle = Mathf.Atan2(direct.y, direct.x);
+            v = mag * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            base.Update();
+        }
+    }
+
+    protected void OnCollisionEnter(Collision coll)
+    {
+        GameObject collidedWith = coll.gameObject;
+        if (collidedWith.tag == "Bullet" || collidedWith.tag == "Player")
+        {
+            Destroy(this.gameObject);
+        }
+
     }
 }
