@@ -14,6 +14,8 @@ public class Player : Ship
 
     private int deaths;
     private float cooldown;
+
+    public AudioSource death;
 	
 	 string sceneName;
 	 Scene scene;
@@ -21,6 +23,8 @@ public class Player : Ship
     // Start is called before the first frame update
     void Start()
     {
+        if (deaths <= 0)
+            deaths = 3;
         base.Start();
         GameObject scoreGO = GameObject.Find("Deaths");
         deathsGT = scoreGO.GetComponent<Text>();
@@ -86,6 +90,7 @@ public class Player : Ship
             GameObject B = Instantiate<GameObject>(bulletPrefab);
             Bullet b = B.GetComponent<Bullet>();
             Vector3 dx = 2f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+            b.speed = v.magnitude + 5;
             b.findAngle(transform.position + dx, transform.position + 2 * dx);
             cooldown = 0.5f;
         }

@@ -8,6 +8,8 @@ public class Shooter : Ship
 
     public GameObject bulletPrefab;
 
+    public AudioSource death;
+
     private GameObject target;
     void Start()
     {
@@ -39,10 +41,10 @@ public class Shooter : Ship
     protected void OnCollisionEnter(Collision coll)
     {
         GameObject collidedWith = coll.gameObject;
-        if (collidedWith.tag == "Bullet" || collidedWith.tag == "Player")
+        if (collidedWith.tag == "Player" || collidedWith.tag == "Bullet")
         {
+            death.Play();
             Destroy(this.gameObject);
         }
-
     }
 }
