@@ -7,12 +7,15 @@ public class Bullet : MonoBehaviour
     public float speed, angle;
     private Vector3 dir;
 
+    public AudioSource pew;
+
     public void findAngle(Vector3 from, Vector3 to)
     {
         transform.position = from;
         Vector3 direct = to - from;
         angle = Mathf.Atan2(direct.y, direct.x);
         dir = speed * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+        pew.Play(0);
     }
   
     void Update()
