@@ -14,6 +14,9 @@ public class Player : Ship
 
     private int deaths;
     private float cooldown;
+	
+	 string sceneName;
+	 Scene scene;
 
     // Start is called before the first frame update
     void Start()
@@ -25,8 +28,12 @@ public class Player : Ship
         distanceGT = scoreGO.GetComponent<Text>();
         
         deaths = PlayerPrefs.GetInt("deaths");
-        deathsGT.text = "DEATHS: " + deaths;
+        deathsGT.text = "Lives: " + deaths;
         cooldown = 0f;
+		
+		scene = SceneManager.GetActiveScene();
+        sceneName = scene.name;
+		
     }
 
     // Update is called once per frame
@@ -43,14 +50,21 @@ public class Player : Ship
     protected void OnCollisionEnter(Collision coll)
     {
         GameObject collidedWith = coll.gameObject;
-        if (collidedWith.tag == "Finish")
+        if (collidedWith.tag == "Finish"){
+			if(sceneName.Equals("Level 1"))
+				SceneManager.LoadScene("Level 2");
+			if(sceneName.Equals("Level 2"))
+				SceneManager.LoadScene("Level 3");
+			if(sceneName.Equals("Level 3"))
+				SceneManager.LoadScene("Winner");
             deathsGT.text = "WINNER";
+		}
         if (collidedWith.tag == "Planet" || collidedWith.tag == "Bullet" || collidedWith.tag == "Shooter")
         {
             p = Vector2.zero;
             v = Vector2.zero;
-            deaths++;
-            deathsGT.text = "DEATHS: " + deaths;
+            deaths--;
+            deathsGT.text = "LIVES: " + deaths;
             Destroy(this.gameObject);
             resetLevel();
         }
@@ -83,7 +97,19 @@ public class Player : Ship
 
 
     private void resetLevel() {
-        PlayerPrefs.SetInt("deaths", deaths);
-        SceneManager.LoadScene("Level 1");
+		if(deaths > 0){
+			PlayerPrefs.SetInt("deaths", deaths);
+			if(sceneName.Equals("Level 1"))
+				SceneManager.LoadScene("Level 1");
+			else if(sceneName.Equals("Level 2"))
+				SceneManager.LoadScene("Level 2");
+			else if(sceneName.Equals("Level 3"))
+				SceneManager.LoadScene("Level 3");
+		}
+		else{
+			PlayerPrefs.SetInt("deaths", 3);
+			SceneManager.LoadScene("Level 1");
+		}
+		
     }
 }
