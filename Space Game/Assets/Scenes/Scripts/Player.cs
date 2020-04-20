@@ -80,7 +80,7 @@ public class Player : Ship
                 PlayerPrefs.SetInt("lives", 3);
                 if ((int) time < PlayerPrefs.GetInt("best") || PlayerPrefs.GetInt("best") == 0)
                     PlayerPrefs.SetInt("best", (int)time);
-                PlayerPrefs.SetInt("time", time);
+                PlayerPrefs.SetInt("time", (int) time);
                 SceneManager.LoadScene("Winner");
             }
 				
