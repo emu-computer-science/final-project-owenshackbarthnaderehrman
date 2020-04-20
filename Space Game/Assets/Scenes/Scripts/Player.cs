@@ -53,7 +53,7 @@ public class Player : Ship
             v *= maxSpeed;
         }
         base.Update();
-        distanceGT.text = "DISTANCE: " + (int) (transform.position - goal.transform.position).magnitude;
+        distanceGT.text = "GOAL DIST: " + (int) (transform.position - goal.transform.position).magnitude;
     }
 
     new protected void OnCollisionEnter(Collision coll)

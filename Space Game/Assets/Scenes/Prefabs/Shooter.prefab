@@ -126,7 +126,7 @@ MonoBehaviour:
   mag: 5
   bulletPrefab: {fileID: 6694330582162603874, guid: d44ef725aa9768c499c8974301b5943a,
     type: 3}
-  distance: 40
+  distance: 33
   death: {fileID: 82926669453008678}
 --- !u!82 &82926669453008678
 AudioSource:
