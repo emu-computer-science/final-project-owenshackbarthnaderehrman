@@ -32,7 +32,7 @@ public class Bullet : MonoBehaviour
     protected void OnCollisionEnter(Collision coll)
     {
         GameObject collidedWith = coll.gameObject;
-        if (collidedWith.tag == "Shooter" || collidedWith.tag == "Player" || collidedWith.tag == "Bullet" || collidedWith.tag == "Planet" || collidedWith.tag == "Goal")
+        if (collidedWith.tag == "Shooter" || collidedWith.tag == "Player" || collidedWith.tag == "Bullet" || collidedWith.tag == "Planet" || collidedWith.tag == "Finish")
         {
             Destroy(this.gameObject);
         }

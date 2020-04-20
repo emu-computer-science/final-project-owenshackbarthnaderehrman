@@ -72,10 +72,10 @@ public class Player : Ship
         {
           p = Vector2.zero;
           v = Vector2.zero;
-           // deaths--;
-            //deathsGT.text = "LIVES: " + deaths;
-           // Destroy(this.gameObject);
-            //resetLevel();
+          deaths--;
+          deathsGT.text = "LIVES: " + deaths;
+          Destroy(this.gameObject);
+          resetLevel();
         }
     }
 
