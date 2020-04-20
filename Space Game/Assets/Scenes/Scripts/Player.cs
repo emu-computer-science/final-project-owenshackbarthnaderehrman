@@ -15,7 +15,7 @@ public class Player : Ship
     public GameObject bulletPrefab;
     private GameObject goal;
 
-    private int deaths;
+    private int lives;
     private float cooldown;
 
     public AudioSource death;
@@ -26,16 +26,16 @@ public class Player : Ship
     // Start is called before the first frame update
     new void Start()
     {
-        if (deaths <= 0)
-            deaths = 3;
+        if (lives <= 0)
+            lives = 3;
         base.Start();
-        GameObject scoreGO = GameObject.Find("Deaths");
+        GameObject scoreGO = GameObject.Find("Lives");
         deathsGT = scoreGO.GetComponent<Text>();
         scoreGO = GameObject.Find("Distance");
         distanceGT = scoreGO.GetComponent<Text>();
         
-        deaths = PlayerPrefs.GetInt("deaths");
-        deathsGT.text = "Lives: " + deaths;
+        lives = PlayerPrefs.GetInt("lives");
+        deathsGT.text = "Lives: " + lives;
         cooldown = 0f;
 		
 		scene = SceneManager.GetActiveScene();
@@ -65,15 +65,19 @@ public class Player : Ship
 			if(sceneName.Equals("Level 2"))
 				SceneManager.LoadScene("Level 3");
 			if(sceneName.Equals("Level 3"))
-				SceneManager.LoadScene("Winner");
-            deathsGT.text = "WINNER";
+            {
+                PlayerPrefs.SetInt("lives", 3);
+                SceneManager.LoadScene("Winner");
+            }
+				
+            deathsGT.text = "CLEAR";
 		}
         if (collidedWith.tag == "Planet" || collidedWith.tag == "Bullet" || collidedWith.tag == "Shooter")
         {
           p = Vector2.zero;
           v = Vector2.zero;
-          deaths--;
-          deathsGT.text = "LIVES: " + deaths;
+          lives--;
+          deathsGT.text = "LIVES: " + lives;
           Destroy(this.gameObject);
           resetLevel();
         }
@@ -104,8 +108,8 @@ public class Player : Ship
 
 
     private void resetLevel() {
-		if(deaths > 0){
-			PlayerPrefs.SetInt("deaths", deaths);
+		if(lives > 0){
+			PlayerPrefs.SetInt("lives", lives);
 			if(sceneName.Equals("Level 1"))
 				SceneManager.LoadScene("Level 1");
 			else if(sceneName.Equals("Level 2"))
@@ -114,7 +118,7 @@ public class Player : Ship
 				SceneManager.LoadScene("Level 3");
 		}
 		else{
-			PlayerPrefs.SetInt("deaths", 3);
+			PlayerPrefs.SetInt("lives", 3);
 			SceneManager.LoadScene("Game Over");
 		}
 		
