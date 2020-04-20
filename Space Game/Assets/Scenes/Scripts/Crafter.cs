@@ -19,6 +19,7 @@ public class Crafter : MonoBehaviour
 		starInstances = new GameObject[numStars];
 		GameObject anchor = GameObject.Find("StarAnchor");
 		GameObject star;
+		GameObject.FindGameObjectWithTag("Music").GetComponent<PlayTheme>().PlayMusic();
 		for(int i=0; i<numStars; i++){
 			star = Instantiate<GameObject>(starPrefab);
 			
