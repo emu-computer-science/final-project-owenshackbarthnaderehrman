@@ -115,7 +115,7 @@ public class Player : Ship
 		}
 		else{
 			PlayerPrefs.SetInt("deaths", 3);
-			SceneManager.LoadScene("Level 1");
+			SceneManager.LoadScene("Game Over");
 		}
 		
     }
