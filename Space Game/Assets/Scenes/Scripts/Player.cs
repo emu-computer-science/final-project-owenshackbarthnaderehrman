@@ -10,7 +10,10 @@ public class Player : Ship
     public Text deathsGT;
     public Text distanceGT;
 
+    public float maxSpeed;
+
     public GameObject bulletPrefab;
+    private GameObject goal;
 
     private int deaths;
     private float cooldown;
@@ -21,7 +24,7 @@ public class Player : Ship
 	 Scene scene;
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         if (deaths <= 0)
             deaths = 3;
@@ -37,21 +40,23 @@ public class Player : Ship
 		
 		scene = SceneManager.GetActiveScene();
         sceneName = scene.name;
-		
+        goal = GameObject.Find("Goal");
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
-
-        
         controls();
+        if (v.magnitude > maxSpeed)
+        {
+            v.Normalize();
+            v *= maxSpeed;
+        }
         base.Update();
-        GameObject goal = GameObject.Find("Goal");
-        distanceGT.text = "DISTANCE: " + (transform.position - goal.transform.position).magnitude;
+        distanceGT.text = "DISTANCE: " + (int) (transform.position - goal.transform.position).magnitude;
     }
 
-    protected void OnCollisionEnter(Collision coll)
+    new protected void OnCollisionEnter(Collision coll)
     {
         GameObject collidedWith = coll.gameObject;
         if (collidedWith.tag == "Finish"){
@@ -65,12 +70,12 @@ public class Player : Ship
 		}
         if (collidedWith.tag == "Planet" || collidedWith.tag == "Bullet" || collidedWith.tag == "Shooter")
         {
-            p = Vector2.zero;
-            v = Vector2.zero;
-            deaths--;
-            deathsGT.text = "LIVES: " + deaths;
-            Destroy(this.gameObject);
-            resetLevel();
+          p = Vector2.zero;
+          v = Vector2.zero;
+           // deaths--;
+            //deathsGT.text = "LIVES: " + deaths;
+           // Destroy(this.gameObject);
+            //resetLevel();
         }
     }
 
@@ -87,12 +92,9 @@ public class Player : Ship
             ++a.x;
         if (Input.GetMouseButtonDown(0) && cooldown < 0)
         {
-            GameObject B = Instantiate<GameObject>(bulletPrefab);
-            Bullet b = B.GetComponent<Bullet>();
             Vector3 dx = 2f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
-            b.speed = v.magnitude + 5;
-            b.findAngle(transform.position + dx, transform.position + 2 * dx);
-            cooldown = 0.5f;
+            GameObject B = Instantiate<GameObject>(bulletPrefab, transform.position + dx, Quaternion.AngleAxis(angle * 180.0f / 3.141592653f, new Vector3(0, 0, 1)));
+            cooldown = 0.125f;
         }
         a *= mag;
         Vector3 pos = Input.mousePosition;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Crafter : MonoBehaviour
 {
     [Header("Set in Inspector")]
-	public int numStars = 100;
+	public int numStars;
 	
 	public GameObject starPrefab;
 	public Vector3 starPosMin = new Vector3(-50,-5);

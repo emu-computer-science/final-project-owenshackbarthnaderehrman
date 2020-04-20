@@ -4,41 +4,42 @@ using UnityEngine;
 
 public class Shooter : Ship
 {
-    private float time = 0;
-
     public GameObject bulletPrefab;
+
+    public float distance;
 
     public AudioSource death;
 
-    private GameObject target;
-    void Start()
+    private GameObject player;
+    new void Start()
     {
         base.Start();
-        target = GameObject.Find("Player");
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
-        if (Random.Range(0.0f, 1.0f) < (Time.deltaTime / 5.0f) && target != null)
+        player = GameObject.Find("Player");
+        if (player == null)
+            return;
+        Vector3 diff = player.transform.position - transform.position;
+        if (diff.magnitude <= distance)
         {
-            GameObject B = Instantiate<GameObject>(bulletPrefab);
-            Bullet b = B.GetComponent<Bullet>();
-            Vector3 from = transform.position + 2f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
-            b.findAngle(from, target.transform.position);
-        }
+            if (Random.Range(0.0f, 1.0f) < (Time.deltaTime / 1.0f))
+            {
+                Vector3 dx = 2f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+                GameObject B = Instantiate<GameObject>(bulletPrefab, transform.position + dx, Quaternion.AngleAxis(angle * 180 / 3.141592653f, new Vector3(0, 0, 1)));
+            }
 
-        //Look at target
-        if (target != null)
-        {
-            Vector3 direct = target.transform.position - transform.position;
+            Vector3 direct = player.transform.position - transform.position;
             angle = Mathf.Atan2(direct.y, direct.x);
             v = mag * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             base.Update();
         }
+        
     }
 
-    protected void OnCollisionEnter(Collision coll)
+    new protected void OnCollisionEnter(Collision coll)
     {
         GameObject collidedWith = coll.gameObject;
         if (collidedWith.tag == "Player" || collidedWith.tag == "Bullet")

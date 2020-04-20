@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed, angle, life;
+    public float speed;
+    private float angle, life;
     private Vector3 dir;
 
     public AudioSource pew;
 
-    public void findAngle(Vector3 from, Vector3 to)
+    public void Awake()
     {
-        transform.position = from;
-        Vector3 direct = to - from;
-        angle = Mathf.Atan2(direct.y, direct.x);
+        angle = 2 * Mathf.Acos(transform.rotation.w);
+        float up = 2 * Mathf.Asin(transform.rotation.z);
+        angle = (up > 0) ? angle : -angle;
         dir = speed * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
         life = 0;
         pew.Play();
@@ -31,7 +32,7 @@ public class Bullet : MonoBehaviour
     protected void OnCollisionEnter(Collision coll)
     {
         GameObject collidedWith = coll.gameObject;
-        if (collidedWith.tag == "Shooter" || collidedWith.tag == "Player" || collidedWith.tag == "Bullet" || collidedWith.tag == "Planet")
+        if (collidedWith.tag == "Shooter" || collidedWith.tag == "Player" || collidedWith.tag == "Bullet" || collidedWith.tag == "Planet" || collidedWith.tag == "Goal")
         {
             Destroy(this.gameObject);
         }
