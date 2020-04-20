@@ -9,6 +9,7 @@ public class Menus : MonoBehaviour
     public Button ll1;
     public Button go;
     public Button qg;
+    private Text timeGT;
 
     void Start()
     {
@@ -18,6 +19,14 @@ public class Menus : MonoBehaviour
             go.onClick.AddListener(gotoMenu);
         if (qg)
             qg.onClick.AddListener(quitGame);
+        GameObject scoreGO = GameObject.Find("Time");
+        if (scoreGO != null)
+        {
+            timeGT = scoreGO.GetComponent<Text>();
+            timeGT.text = (ll1 == null) ? "TIME: " + PlayerPrefs.GetInt("time") : "BEST: " + PlayerPrefs.GetInt("best");
+        }
+        if (ll1 != null)
+            PlayerPrefs.SetInt("time", 0);
     }
 
     public void loadLevel1()

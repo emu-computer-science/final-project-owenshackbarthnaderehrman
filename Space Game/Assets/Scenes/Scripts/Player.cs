@@ -9,6 +9,7 @@ public class Player : Ship
 
     public Text deathsGT;
     public Text distanceGT;
+    public Text timeGT;
 
     public float maxSpeed;
 
@@ -16,7 +17,7 @@ public class Player : Ship
     private GameObject goal;
 
     private int lives;
-    private float cooldown;
+    private float cooldown, time, bestTime;
 
     public AudioSource death;
 	
@@ -26,6 +27,8 @@ public class Player : Ship
     // Start is called before the first frame update
     new void Start()
     {
+        if (time < 0)
+            time = 0;
         if (lives <= 0)
             lives = 3;
         base.Start();
@@ -33,9 +36,14 @@ public class Player : Ship
         deathsGT = scoreGO.GetComponent<Text>();
         scoreGO = GameObject.Find("Distance");
         distanceGT = scoreGO.GetComponent<Text>();
-        
+        scoreGO = GameObject.Find("Time");
+        timeGT = scoreGO.GetComponent<Text>();
+
+        time = PlayerPrefs.GetInt("time");
         lives = PlayerPrefs.GetInt("lives");
-        deathsGT.text = "Lives: " + lives;
+        bestTime = PlayerPrefs.GetInt("best");
+
+        deathsGT.text = "LIVES: " + lives;
         cooldown = 0f;
 		
 		scene = SceneManager.GetActiveScene();
@@ -54,19 +62,25 @@ public class Player : Ship
         }
         base.Update();
         distanceGT.text = "GOAL DIST: " + (int) (transform.position - goal.transform.position).magnitude;
+        time += Time.deltaTime;
+        timeGT.text = "TIME: " + (int) time;
     }
 
     new protected void OnCollisionEnter(Collision coll)
     {
         GameObject collidedWith = coll.gameObject;
         if (collidedWith.tag == "Finish"){
-			if(sceneName.Equals("Level 1"))
+            PlayerPrefs.SetInt("time", (int)time);
+            if (sceneName.Equals("Level 1"))
 				SceneManager.LoadScene("Level 2");
 			if(sceneName.Equals("Level 2"))
 				SceneManager.LoadScene("Level 3");
 			if(sceneName.Equals("Level 3"))
             {
                 PlayerPrefs.SetInt("lives", 3);
+                if ((int) time < PlayerPrefs.GetInt("best") || PlayerPrefs.GetInt("best") == 0)
+                    PlayerPrefs.SetInt("best", (int)time);
+                PlayerPrefs.SetInt("time", time);
                 SceneManager.LoadScene("Winner");
             }
 				
@@ -109,7 +123,8 @@ public class Player : Ship
 
     private void resetLevel() {
 		if(lives > 0){
-			PlayerPrefs.SetInt("lives", lives);
+            PlayerPrefs.SetInt("time", (int) time);
+            PlayerPrefs.SetInt("lives", lives);
 			if(sceneName.Equals("Level 1"))
 				SceneManager.LoadScene("Level 1");
 			else if(sceneName.Equals("Level 2"))
@@ -119,7 +134,7 @@ public class Player : Ship
 		}
 		else{
 			PlayerPrefs.SetInt("lives", 3);
-			SceneManager.LoadScene("Game Over");
+            SceneManager.LoadScene("Game Over");
 		}
 		
     }
