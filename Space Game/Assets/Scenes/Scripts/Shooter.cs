@@ -22,6 +22,16 @@ public class Shooter : Ship
         player = GameObject.Find("Player");
         if (player == null)
             return;
+		
+		double playPosX = player.transform.position.x;
+		double playPosY = player.transform.position.y;
+		double shipPosX = 0;
+		double shipPosY = 0;
+		if(this != null){
+			shipPosX = this.transform.position.x;
+			shipPosY = this.transform.position.y;;
+		}
+		if((shipPosX - playPosX) <= 20 && (shipPosY - playPosY) <= 20 && (shipPosX - playPosX) >= -20 && (shipPosY - playPosY) >= -20){
         Vector3 diff = player.transform.position - transform.position;
         if (diff.magnitude <= distance)
         {
@@ -36,6 +46,7 @@ public class Shooter : Ship
             v = mag * new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             base.Update();
         }
+		}
         
     }
 
